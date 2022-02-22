@@ -10,12 +10,13 @@ import { GET_ME } from '../utils/queries';
 import { REMOVE_BOOK } from '../utils/mutations';
 
 const SavedBooks = () => {
-  const [userData, setUserData] = useState({});
+  // const [userData, setUserData] = useState({});
 
   const { loading, data } = useQuery(GET_ME);
   const userData = data?.users || [];
+  const [removeBookId, { error, bookData }] = useMutation(REMOVE_BOOK);
   // use this to determine if `useEffect()` hook needs to run again
-  // const userDataLength = Object.keys(userData).length;
+  const userDataLength = Object.keys(userData).length;
 
   // useEffect(() => {
   //   const getUserData = async () => {
@@ -52,16 +53,21 @@ const SavedBooks = () => {
 
     try {
       // const response = await deleteBook(bookId, token);
-      const [response, { error, data }] = useMutation(REMOVE_BOOK);
+      // const [response, { error, data }] = useMutation(REMOVE_BOOK);
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
+      // if (!response.ok) {
+      //   throw new Error('something went wrong!');
+      // }
 
-      const updatedUser = await response.json();
-      setUserData(updatedUser);
-      // upon success, remove book's id from localStorage
-      removeBookId(bookId);
+      // const updatedUser = await response.json();
+      // setUserData(updatedUser);
+      // // upon success, remove book's id from localStorage
+      // removeBookId(bookId);
+      const { bookData } = await removeBookId({
+        variables: { ...userData },
+      });
+      Auth.removeBookId(bookData.login.token);
+
     } catch (err) {
       console.error(err);
     }
