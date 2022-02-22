@@ -43,12 +43,12 @@ const resolvers = {
       return { token, profile };
     },
 
-    saveBook: async (parent, { userId, title, authors, description, bookId, image, link }, context) => {
+    saveBook: async (parent, { userId, bookId }, context) => {
       if (context.user) {
         return User.findOneAndUpdate(
           { _id: userId },
           {
-            $addToSet: { savedBooks: { title, authors, description, bookId, image, link } }
+            $addToSet: { savedBooks: bookId }
           },
           {
             new: true,
