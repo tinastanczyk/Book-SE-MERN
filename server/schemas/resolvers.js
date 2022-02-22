@@ -30,7 +30,7 @@ const resolvers = {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw new AuthenticationError('No profile with this email found!');
+        throw new AuthenticationError('No user with this email found!');
       }
 
       const correctPw = await user.isCorrectPassord(password);
@@ -40,7 +40,7 @@ const resolvers = {
       }
       
       const token = signToken(user);
-      return { token, profile };
+      return { token, user };
     },
 
     saveBook: async (parent, { userId, bookId }, context) => {
