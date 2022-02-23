@@ -64,17 +64,15 @@ const SearchBooks = () => {
     if (!token) {
       return false;
     }
-    console.log(token);
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
 
     try {
       const { data } = await saveBook({
         variables: { bookToSave: {...bookToSave} },
       });
-      console.log(data);
+      setSavedBookIds([...savedBookIds, bookToSave.bookId])
     } catch (err) {
       console.error(JSON.parse(JSON.stringify(err)));
-      console.log("there is an error here");
     }
   };
 
